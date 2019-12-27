@@ -29,10 +29,9 @@ class LinksPageView(TemplateView):
 @api_view(["POST"])
 def fv_table_view(request, format=None):
     try:
-        calculateResponse = calculate.create_fv_table(
+        calculateResponse = calculate.create_fv_table2(
             request.data['startingCapitalAmount'], 
             request.data['additionAmount'], 
-            request.data['returnPercentage'], 
             request.data['numberOfPeriods'], 
             request.data['typeOfPeriod'])
         return JsonResponse(calculateResponse, safe=False)

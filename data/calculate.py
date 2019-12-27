@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 
+from . import monthly
+from . import yearly
+
 
 def create_fv_table(startingCapitalAmount, additionAmount, returnPercentage, numberOfPeriods, typeOfPeriod):
     if typeOfPeriod == 'Month':
@@ -25,5 +28,65 @@ def create_fv_table(startingCapitalAmount, additionAmount, returnPercentage, num
                                fv_table.iloc[i, 2]) * returnPercentage
         fv_table.iloc[i, 4] = (fv_table.iloc[i, 1] +
                                fv_table.iloc[i, 2]) + fv_table.iloc[i, 3]
+
+    return fv_table.to_dict(orient='records')
+
+def create_fv_table2(startingCapitalAmount, additionAmount, numberOfPeriods, typeOfPeriod):
+
+    if typeOfPeriod == 'Month':
+        returns = monthly.returns
+    else:
+        returns = yearly.returns
+
+    number_of_slices = len(returns) - numberOfPeriods
+    list_of_slices = []
+
+    for i in range(0, number_of_slices):
+
+        end = i + numberOfPeriods + 1
+        list_of_slices.append(returns[i:end])
+    
+    list_of_returns = []
+
+    for j in range(0, len(list_of_slices)):
+
+        temp_list_of_slices = list_of_slices[j]
+        temp_value = 0
+        temp_list_of_returns = []
+
+        for k in range(0, len(temp_list_of_slices)):
+
+            if temp_value == 0:
+                temp_value = startingCapitalAmount * (1 + temp_list_of_slices[k])
+            else:
+                temp_value = temp_value * (1 + temp_list_of_slices[k]) + additionAmount
+            temp_list_of_returns.append(temp_value)
+
+        list_of_returns.append(temp_list_of_returns)
+
+    fv_table = np.zeros((numberOfPeriods, 4)) # period, avg, min, max
+    fv_table = pd.DataFrame(fv_table)
+    fv_table.columns = ['period', 'avg', 'min', 'max']
+    fv_table['period'] = np.arange(1, numberOfPeriods + 1)
+    returns_avg = 0
+    returns_min = 0
+    returns_max = 0
+
+    for l in range(0, numberOfPeriods):
+
+        temp_list = []
+
+        for m in range(0, len(list_of_returns)):
+
+            temp_list.append(list_of_returns[m][l])
+
+        np_array = np.asarray(temp_list)
+        returns_avg = np_array.sum() / len(list_of_returns)
+        returns_min = np_array.min()
+        returns_max = np_array.max()
+        
+        fv_table.iloc[l, 1] = returns_avg
+        fv_table.iloc[l, 2] = returns_min
+        fv_table.iloc[l, 3] = returns_max
 
     return fv_table.to_dict(orient='records')
