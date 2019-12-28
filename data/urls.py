@@ -4,5 +4,5 @@ from django.urls import path, include
 from data import views
 
 urlpatterns = [
-    url(r'^apitest/$', views.fv_table_view),  # for REST API test
+    url(r'^api/get-returns/$', views.fv_table_view),  # for REST API test
 ]
