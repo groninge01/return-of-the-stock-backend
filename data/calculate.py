@@ -64,11 +64,11 @@ def create_fv_table2(startingCapitalAmount, additionAmount, numberOfPeriods, typ
 
         list_of_returns.append(temp_list_of_returns)
 
-    fv_table = np.zeros((numberOfPeriods, 4)) # period, avg, min, max
+    fv_table = np.zeros((numberOfPeriods, 4)) # period, mean, min, max
     fv_table = pd.DataFrame(fv_table)
-    fv_table.columns = ['period', 'avg', 'min', 'max']
+    fv_table.columns = ['period', 'mean', 'min', 'max']
     fv_table['period'] = np.arange(1, numberOfPeriods + 1)
-    returns_avg = 0
+    returns_mean = 0
     returns_min = 0
     returns_max = 0
 
@@ -81,11 +81,11 @@ def create_fv_table2(startingCapitalAmount, additionAmount, numberOfPeriods, typ
             temp_list.append(list_of_returns[m][l])
 
         np_array = np.asarray(temp_list)
-        returns_avg = np_array.sum() / len(list_of_returns)
+        returns_mean = np_array.mean()
         returns_min = np_array.min()
         returns_max = np_array.max()
         
-        fv_table.iloc[l, 1] = returns_avg
+        fv_table.iloc[l, 1] = returns_mean
         fv_table.iloc[l, 2] = returns_min
         fv_table.iloc[l, 3] = returns_max
 
