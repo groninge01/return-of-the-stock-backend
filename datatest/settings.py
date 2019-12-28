@@ -144,6 +144,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ORIGIN_WHITELIST = [
     "https://infallible-ptolemy-2bed34.netlify.com",
+    "https://www.rots.ml",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://192.168.178.28:8000"
@@ -151,4 +152,5 @@ CORS_ORIGIN_WHITELIST = [
 
 CSRF_TRUSTED_ORIGINS = [
     "infallible-ptolemy-2bed34.netlify.com",
+    "www.rots.ml"
 ]
