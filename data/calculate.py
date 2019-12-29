@@ -53,7 +53,7 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfPeriods, type
         temp_list_of_returns = []
 
         for k in range(0, len(temp_list_of_slices)):
-            if temp_value == 0:
+            if temp_value == 0 and startingCapitalAmount > 0:
                 temp_value = startingCapitalAmount * (1 + temp_list_of_slices[k])
             else:
                 temp_value = temp_value * (1 + temp_list_of_slices[k]) + additionAmount
