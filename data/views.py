@@ -11,8 +11,7 @@ def fv_table_view(request, format=None):
         calculateResponse = calculate.create_fv_table(
             request.data['startingCapitalAmount'], 
             request.data['additionAmount'], 
-            request.data['numberOfPeriods'], 
-            request.data['typeOfPeriod'])
+            request.data['numberOfYears'])
         return JsonResponse(calculateResponse, safe=False)
     except ValueError as e:
         return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
