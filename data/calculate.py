@@ -67,15 +67,12 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
     temp_table = pd.DataFrame(temp_table)
 
     for i in range(slices):
-        df_temp = df.iloc[i:i + periods,]
-        df_temp = df_temp.reset_index()
-        del df_temp['index']
         capital = startingCapitalAmount
         
-        for row in df_temp.itertuples():
-            capital = capital * (1 + row.Yield) + additionAmount
-            if (row.Index + 1) % 12 == 0:
-                row_index = int(((row.Index + 1) / 12) - 1)
+        for j in range(periods):
+            capital = capital * (1 + df.iloc[i + j, 16]) + additionAmount
+            if j % 12 == 0:
+                row_index = int(j / 12)
                 temp_table.iloc[row_index, i] = capital
 
     std = temp_table.std(axis=1)
