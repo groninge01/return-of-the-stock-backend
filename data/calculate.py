@@ -52,7 +52,7 @@ import pandas as pd
     # return fv_table.to_dict(orient='records')
 
 def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
-    df = pd.read_csv('./data/cape.csv')
+    df = pd.read_csv('./data/data.csv')
     df = df.iloc[:-3]
 
     periods = numberOfYears * 12
@@ -70,7 +70,7 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
         capital = startingCapitalAmount
         
         for j in range(periods):
-            capital = capital * (1 + df.iloc[i + j, 16]) + additionAmount
+            capital = capital * (1 + df.iloc[i + j, 1]) + additionAmount
             if j % 12 == 0:
                 row_index = int(j / 12)
                 temp_table.iloc[row_index, i] = capital
