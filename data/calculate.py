@@ -60,7 +60,7 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
 
     fv_table = np.zeros((numberOfYears, 4)) # years, mean, min, max
     fv_table = pd.DataFrame(fv_table)
-    fv_table.columns = ['years', 'mean', 'min', 'max']
+    fv_table.columns = ['years', 'median', 'min', 'max']
     fv_table['years'] = np.arange(1, numberOfYears + 1)
 
     temp_table = np.zeros((numberOfYears, slices))
@@ -76,11 +76,11 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
                 temp_table.iloc[row_index, i] = capital
 
     std = temp_table.std(axis=1)
-    r_mean = temp_table.mean(axis=1)
-    r_min = r_mean - std
-    r_max = r_mean + std
+    r_median = temp_table.median(axis=1)
+    r_min = r_median - std
+    r_max = r_median + std
 
-    fv_table['mean'] = r_mean
+    fv_table['median'] = r_median
     fv_table['min'] = r_min
     fv_table['max'] = r_max
 
