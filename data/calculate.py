@@ -6,12 +6,11 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
     df = df.iloc[:-3]
 
     periods = numberOfYears * 12
-    slices = len(df['Date']) - periods
+    slices = len(df['Real Yield']) - periods
 
-    fv_table = np.zeros((numberOfYears, 4)) # years, mean, min, max
+    fv_table = np.zeros((numberOfYears, 3)) # mean, min, max
     fv_table = pd.DataFrame(fv_table)
-    fv_table.columns = ['years', 'median', 'min', 'max']
-    fv_table['years'] = np.arange(1, numberOfYears + 1)
+    fv_table.columns = ['median', 'min', 'max']
 
     temp_table = np.zeros((numberOfYears, slices))
     temp_table = pd.DataFrame(temp_table)
@@ -20,7 +19,7 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
         capital = startingCapitalAmount
         
         for j in range(periods):
-            capital = capital * (1 + df.iloc[i + j, 1]) + additionAmount
+            capital = capital * (1 + df.iloc[i + j, 0]) + additionAmount
             if j % 12 == 0:
                 row_index = int(j / 12)
                 temp_table.iloc[row_index, i] = capital
@@ -34,7 +33,7 @@ def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
     fv_table['min'] = r_min
     fv_table['max'] = r_max
 
-    fv_table.loc[-1] = [0, startingCapitalAmount, startingCapitalAmount, startingCapitalAmount]  # adding a row
+    fv_table.loc[-1] = [startingCapitalAmount, startingCapitalAmount, startingCapitalAmount]  # adding a row
     fv_table.index = fv_table.index + 1  # shifting index
     fv_table = fv_table.sort_index()  # sorting by index
 
