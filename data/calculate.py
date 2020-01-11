@@ -2,27 +2,32 @@ import numpy as np
 import pandas as pd
 
 def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
-    df = pd.read_csv('./data/data.csv')
-    df = df.iloc[:-3]
+    # df = pd.read_csv('./data/data.csv')
+    # df = df.iloc[:-3]
+
+    yield_np = np.genfromtxt('./data/data.csv', skip_header=1, skip_footer=3)
 
     periods = numberOfYears * 12
-    slices = len(df['Real Yield']) - periods
+    slices = yield_np.size - periods
 
     fv_table = np.zeros((numberOfYears, 3)) # mean, min, max
     fv_table = pd.DataFrame(fv_table)
     fv_table.columns = ['median', 'min', 'max']
 
-    temp_table = np.zeros((numberOfYears, slices))
+    temp_table = np.zeros((numberOfYears, slices)) # (rows, columns)
     temp_table = pd.DataFrame(temp_table)
 
     for i in range(slices):
         capital = startingCapitalAmount
-        
+        capital_series = []
+    
         for j in range(periods):
-            capital = capital * (1 + df.iloc[i + j, 0]) + additionAmount
+            capital = capital * (1 + yield_np[i + j]) + additionAmount
+            
             if j % 12 == 0:
-                row_index = int(j / 12)
-                temp_table.iloc[row_index, i] = capital
+                capital_series.append(capital)
+        
+        temp_table[i] = capital_series
 
     std = temp_table.std(axis=1)
     r_median = temp_table.median(axis=1)
