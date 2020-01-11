@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 
 def create_fv_table(startingCapitalAmount, additionAmount, numberOfYears):
-    # df = pd.read_csv('./data/data.csv')
-    # df = df.iloc[:-3]
 
     yield_np = np.genfromtxt('./data/data.csv', skip_header=1, skip_footer=3)
 
